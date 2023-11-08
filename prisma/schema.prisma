@@ -9,3 +9,41 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Pet {
+  id                String    @id @default(uuid())
+  name              String
+  age               String
+  energyLevel       Int
+  size              String
+  independencyLevel String
+  isAvailable       Boolean   @default(true)
+  registeredAt      DateTime  @default(now())
+  adoptedAt         DateTime?
+
+  Organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+}
+
+model Organization {
+  id        String   @id @default(uuid())
+  name      String
+  contact   String
+  createdAt DateTime @default(now())
+
+  Address    Address @relation(fields: [addressId], references: [id])
+  addressId  Int
+  number     Int
+  complement String?
+
+  Pet Pet[]
+}
+
+model Address {
+  id           Int            @id @default(autoincrement())
+  street       String
+  neighborhood String
+  city         String
+  state        String
+  Organization Organization[]
+}
