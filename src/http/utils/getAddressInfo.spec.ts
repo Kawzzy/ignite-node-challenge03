@@ -6,7 +6,7 @@ describe('getAddressInfo', () => {
     it('should return the city\'s info based on zip-code', async () => {
         const response = await getAddressInfo('89040100');
 
-        expect(response.data).toEqual(expect.objectContaining({ 'cep': '89040-100'}));
+        expect(response).toEqual(expect.objectContaining({ 'zipCode': '89040-100'}));
     });
 
     it('should return InvalidZipCode error', async () => {
@@ -19,6 +19,6 @@ describe('getAddressInfo', () => {
         const zipCode = '00000000';
         const response = await getAddressInfo(zipCode);
 
-        expect(response.data).toEqual(`CEP ${zipCode} não encontrado!`);
+        expect(response).toEqual(`CEP ${zipCode} não encontrado!`);
     });
 });

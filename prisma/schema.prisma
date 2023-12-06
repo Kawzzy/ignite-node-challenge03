@@ -21,7 +21,7 @@ model Pet {
   registeredAt      DateTime  @default(now())
   adoptedAt         DateTime?
 
-  Organization   Organization @relation(fields: [organizationId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
 }
 
@@ -31,7 +31,7 @@ model Organization {
   contact   String
   createdAt DateTime @default(now())
 
-  Address    Address @relation(fields: [addressId], references: [id])
+  address    Address @relation(fields: [addressId], references: [id])
   addressId  Int
   number     Int
   complement String?
@@ -40,10 +40,12 @@ model Organization {
 }
 
 model Address {
-  id           Int            @id @default(autoincrement())
+  id           Int    @id @default(autoincrement())
+  zipCode      String @unique
   street       String
   neighborhood String
   city         String
   state        String
+
   Organization Organization[]
 }

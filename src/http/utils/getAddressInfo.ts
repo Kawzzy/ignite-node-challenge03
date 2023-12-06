@@ -1,19 +1,31 @@
 import fetch from 'node-fetch';
 
 import { z } from 'zod';
+import { AddressInfoSchema } from '@/utils/addressUtils';
 import { InvalidZipCode } from '@/lib/errors/InvalidZipCode';
 
 const dataErrorSchema = z.object({
-    erro: z.boolean()
+    erro: z.boolean(),
+    zipCode: z.string().optional()
 });
 
-export async function getAddressInfo(zipCode: string) {
+interface IAddressResponseInfo {
+    zipCode: string
+    street: string
+    neighborhood: string
+    city: string
+    state: string
+}
 
-    if (zipCode.length != 8) {
+export async function getAddressInfo(zipCodeParam: string): Promise<string | IAddressResponseInfo> {
+
+    if (zipCodeParam.length != 8) {
         throw new InvalidZipCode;
     }
     
-    const url = `https://viacep.com.br/ws/${zipCode}/json/`;  
+    const url = `https://viacep.com.br/ws/${zipCodeParam}/json/`;  
+
+    const responseSchema = z.union([AddressInfoSchema, dataErrorSchema]);
 
     let data;
 
@@ -24,15 +36,31 @@ export async function getAddressInfo(zipCode: string) {
         throw new Error(`Error: ${error}`);
     }
     
-    try {
-        const dataErro = dataErrorSchema.parse(data);
+    const parsedData = responseSchema.parse(data);
 
-        if (dataErro.erro) {
-            return { data: `CEP ${zipCode} não encontrado!` };
-        }
-    } catch (error) {
-        // if any error occurs, it's bc the data returned has the correct expected data
+    if ('erro' in parsedData) {
+        return `CEP ${zipCodeParam} não encontrado!`;
+    }
+
+    let zipCode = '', 
+        street = '', 
+        neighborhood = '', 
+        city = '', 
+        state = '';
+
+    if (parsedData.cep && parsedData.logradouro && parsedData.bairro && parsedData.localidade && parsedData.uf) {
+        zipCode = parsedData.cep;
+        street = parsedData.logradouro;
+        neighborhood = parsedData.bairro;
+        city = parsedData.localidade;
+        state = parsedData.uf;
     }
     
-    return { data }; 
+    return {
+        zipCode,
+        street,
+        neighborhood,
+        city,
+        state,
+    }; 
 }
