@@ -21,4 +21,15 @@ export class PrismaOrganizationRepository implements IOrganizationRepository {
 
         return org;
     }
+
+    async findById(organizationId: string): Promise<Organization | null> {
+        
+        const org = await prismaConnection.organization.findUniqueOrThrow({
+            where: {
+                id: organizationId
+            }
+        });
+
+        return org;
+    }
 }

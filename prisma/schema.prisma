@@ -11,15 +11,15 @@ datasource db {
 }
 
 model Pet {
-  id                String    @id @default(uuid())
-  name              String
-  age               String
-  energyLevel       Int
-  size              String
-  independencyLevel String
-  isAvailable       Boolean   @default(true)
-  registeredAt      DateTime  @default(now())
-  adoptedAt         DateTime?
+  id              String          @id @default(uuid())
+  name            String
+  age             Age
+  energyLevel     Int
+  size            Size
+  dependencyLevel DependencyLevel
+  isAvailable     Boolean         @default(true)
+  registeredAt    DateTime        @default(now())
+  adoptedAt       DateTime?
 
   organization   Organization @relation(fields: [organizationId], references: [id])
   organizationId String
@@ -48,4 +48,23 @@ model Address {
   state        String
 
   Organization Organization[]
+}
+
+enum Age {
+  FILHOTE
+  JOVEM
+  ADULTO
+  VELHO
+}
+
+enum Size {
+  PEQUENO
+  MEDIO
+  GRANDE
+}
+
+enum DependencyLevel {
+  DEPENDENTE
+  MEDIO
+  INDEPENDENTE
 }
