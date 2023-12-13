@@ -1,6 +1,6 @@
-import { Prisma } from '@prisma/client';
-import { IPetRepository } from '../petRepository';
+import { Pet, Prisma } from '@prisma/client';
 import { prismaConnection } from '@/lib/prisma';
+import { IPetRepository } from '../petRepository';
 
 export class PrismaPetRepository implements IPetRepository {
     
@@ -9,5 +9,20 @@ export class PrismaPetRepository implements IPetRepository {
         const pet = await prismaConnection.pet.create({ data });
 
         return pet;
+    }
+
+    async getPetByCity(city: string): Promise<Pet[]> {
+        
+        const pets = await prismaConnection.pet.findMany({
+            where: {
+                organization: {
+                    address: {
+                        city: city
+                    }
+                }
+            }
+        });
+
+        return pets;
     }
 }

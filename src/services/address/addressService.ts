@@ -19,7 +19,7 @@ export class AddressService {
         const addressResponse = await getAddressInfo(zipCodeParam);
 
         const { zipCode, street, neighborhood, city, state } = selectedSchema.parse(addressResponse);
-
+        
         let address;
 
         if (zipCode) {
@@ -29,10 +29,10 @@ export class AddressService {
             if (!address && street && neighborhood && city && state) {
                 address = await this.addressRepository.create({
                     zipCode,
-                    street,
-                    neighborhood,
-                    city,
-                    state
+                    street: street.toLowerCase(),
+                    neighborhood: neighborhood.toLowerCase(),
+                    city: city.toLowerCase(),
+                    state: state.toLowerCase()
                 });
             }
         }
