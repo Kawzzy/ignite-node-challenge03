@@ -24,8 +24,10 @@ export class InMemoryOrganizationRepository implements IOrganizationRepository {
     }
 
     async findByName(name: string): Promise<Organization | null> {
-        const org = this.orgs.find(org => org.name === name);
+        return this.orgs.find(org => org.name === name) ?? null;
+    }
 
-        return org ?? null;
+    async findById(organizationId: string): Promise<Organization | null> {
+        return this.orgs.find(org => org.id === organizationId) ?? null;
     }
 }
