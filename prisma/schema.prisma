@@ -26,10 +26,12 @@ model Pet {
 }
 
 model Organization {
-  id        String   @id @default(uuid())
-  name      String
-  contact   String
-  createdAt DateTime @default(now())
+  id           String   @id @default(uuid())
+  name         String
+  contact      String
+  createdAt    DateTime @default(now())
+  email        String   @unique
+  passwordHash String
 
   address    Address @relation(fields: [addressId], references: [id])
   addressId  Int

@@ -7,4 +7,6 @@ export interface IOrganizationRepository {
     findByName(name: string): Promise<Organization | null>
 
     findById(organizationId: string): Promise<Organization | null>
+
+    findByEmail(email: string): Promise<Organization | null>
 }

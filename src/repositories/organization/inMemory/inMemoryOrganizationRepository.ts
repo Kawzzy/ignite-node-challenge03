@@ -11,6 +11,8 @@ export class InMemoryOrganizationRepository implements IOrganizationRepository {
         const org: Organization = {
             id: randomUUID(),
             name: data.name,
+            email: data.email,
+            passwordHash: data.passwordHash,
             contact: data.contact,
             createdAt: new Date(),
             addressId: data.addressId,
@@ -29,5 +31,9 @@ export class InMemoryOrganizationRepository implements IOrganizationRepository {
 
     async findById(organizationId: string): Promise<Organization | null> {
         return this.orgs.find(org => org.id === organizationId) ?? null;
+    }
+
+    async findByEmail(email: string): Promise<Organization | null> {
+        return this.orgs.find(org => org.email === email) ?? null;
     }
 }

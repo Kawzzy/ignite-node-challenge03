@@ -32,4 +32,14 @@ export class PrismaOrganizationRepository implements IOrganizationRepository {
 
         return org;
     }
+
+    async findByEmail(email: string): Promise<Organization | null> {
+        const org = await prismaConnection.organization.findUniqueOrThrow({
+            where: {
+                email
+            }
+        });
+
+        return org;
+    }
 }
